@@ -1,3 +1,4 @@
+const { setToRedis } = require("../../helpers/cached");
 const { getData, updatePoints } = require("../../helpers/leaderboard");
 
 const getDataPagewise = async (req, res) => {
@@ -10,6 +11,8 @@ const getDataPagewise = async (req, res) => {
       : undefined;
 
     const data = await getData(pageNumber, currentUser);
+    const key = currentUser ? `${currentUser}_${pageNumber}` : pageNumber;
+    setToRedis(key, data)
     res.status(200).json({ success: true, ...data });
   } catch (e) {
     console.log(e);
