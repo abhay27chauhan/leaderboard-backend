@@ -19,7 +19,7 @@ const getData = async (pageNumber = 1, currentUser, pageSize = 10) => {
       userDataPromise,
       pointsDataPromise,
     ]);
-    const aheadOfCurrentUser = await Leaderboard.find({
+    let aheadOfCurrentUser = await Leaderboard.find({
       points: { $gt: pointsData.points },
     }).distinct("points");
     const rank = aheadOfCurrentUser.length + 1;
@@ -27,6 +27,7 @@ const getData = async (pageNumber = 1, currentUser, pageSize = 10) => {
       rank,
       name: userData.name,
       points: pointsData.points,
+      userId: userData.id,
     };
   }
 
@@ -44,8 +45,8 @@ const getData = async (pageNumber = 1, currentUser, pageSize = 10) => {
   const howManyAhead = response.splice(response.length - 1, 1);
   const users = response;
 
-  const rankOfFirstUser = howManyAhead[0].length + 1;
-  const refPoints = leaderboard[0].points;
+  let rankOfFirstUser = howManyAhead[0].length + 1;
+  let refPoints = leaderboard[0].points;
 
   const data = leaderboard.map((entry, i) => {
     if (entry.points < refPoints) {
@@ -57,6 +58,7 @@ const getData = async (pageNumber = 1, currentUser, pageSize = 10) => {
         rank: rankOfFirstUser,
         name: users[i].name,
         points: entry.points,
+        isSearchedUser: entry.userId == currentUserObject?.userId
       };
     }
     const user = users.find((user) => user.id == entry.userId);
@@ -64,6 +66,7 @@ const getData = async (pageNumber = 1, currentUser, pageSize = 10) => {
       rank: rankOfFirstUser,
       name: user.name,
       points: entry.points,
+      isSearchedUser: entry.userId == currentUserObject?.userId,
     };
   });
   return {
