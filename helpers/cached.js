@@ -1,10 +1,15 @@
 const redis = require("redis");
 
 const REDIS_PORT = process.env.REDIS_PORT;
-const client = redis.createClient(REDIS_PORT);
+let client;
+if (process.env.REDISCLOUD_URL) {
+  let redisURL = url.parse(process.env.REDISCLOUD_URL);
+  client = redis.createClient(redisURL);
+} else {
+  client = redis.createClient(REDIS_PORT);
+}
 
 (async () => {
-
   await client.connect();
   console.log("connected");
 })();
@@ -19,21 +24,21 @@ async function cached(req, res, next) {
   try {
     let data = await client.get(key);
     data = JSON.parse(data);
-    if(!data){
+    if (!data) {
       next();
-    }else{
+    } else {
       res.status(200).json({ success: true, ...data });
     }
-  } catch(error){
-    throw error
+  } catch (error) {
+    throw error;
   }
 }
 
-async function setToRedis(key, data){
+async function setToRedis(key, data) {
   await client.setEx(key, 3600, JSON.stringify(data));
 }
 
 module.exports = {
-    cached,
-    setToRedis,
+  cached,
+  setToRedis,
 };
