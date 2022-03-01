@@ -5,7 +5,7 @@ const morgan = require("morgan");
 
 const { connect } = require("./utils/db");
 const leaderboardRouter = require("./resources/leaderboard/leaderboard.router");
-// require("./helpers/cached");
+require("./helpers/cached");
 
 const app = express();
 
