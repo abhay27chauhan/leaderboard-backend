@@ -9,10 +9,7 @@ if (process.env.REDISCLOUD_URL) {
   client = redis.createClient(REDIS_PORT);
 }
 
-(async () => {
-  await client.connect();
-  console.log("connected");
-})();
+client.connect();
 
 async function cached(req, res, next) {
   const pageNumber = req.query.pageNumber
