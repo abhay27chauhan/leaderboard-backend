@@ -1,7 +1,7 @@
 const { faker } = require("@faker-js/faker");
 const fs = require("fs");
 
-const precision = 100; // 2 decimals
+const precision = 1000; // 3 decimals
 const users = [];
 const leaderboard = [];
 
@@ -18,7 +18,7 @@ for(let i=0; i<1000000; i++){
 console.log("user generated!!");
 
 for(let i=0; i<1000000; i++){
-    const points = Math.floor(Math.random() * (100 * precision - 1 * precision) + 1 * precision) / (1*precision);
+    const points = Math.floor(Math.random() * (1000 * precision - 1 * precision) + 1 * precision) / (1*precision);
     const id = i+1;
     const user = {
         id: id,
@@ -38,7 +38,7 @@ fs.writeFile("users.json", JSON.stringify(users), (err) => {
     }
 })
 
-fs.writeFile("leaderboard.json", JSON.stringify(leaderboard), (err) => {
+fs.writeFile("leaderboards.json", JSON.stringify(leaderboard), (err) => {
     if(!err){
         console.log("done");
     } else {
