@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.get("/", (req, res) => res.send("Welcome to leaderboard-app backend"));
+app.get("/auth", (req, res) => res.send("This is the auth page"));
 
 app.use("/api/leaderboard", leaderboardRouter);
 
